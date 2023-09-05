@@ -43,12 +43,19 @@ struct file_operations DmaFunctions = {
 };
 
 // Setup proc file operations
-static struct file_operations DmaProcOps = {
-   .owner   = THIS_MODULE,
-   .open    = Dma_ProcOpen,
-   .read    = seq_read,
-   .llseek  = seq_lseek,
-   .release = seq_release
+// static struct file_operations DmaProcOps = {
+//   .owner   = THIS_MODULE,
+//   .open    = Dma_ProcOpen,
+//   .read    = seq_read,
+//   .llseek  = seq_lseek,
+//   .release = seq_release
+//};
+
+static struct proc_ops DmaProcOps = {
+   .proc_open    = Dma_ProcOpen,
+   .proc_read    = seq_read,
+   .proc_lseek  = seq_lseek,
+   .proc_release = seq_release
 };
 
 // Sequence operations
@@ -76,7 +83,7 @@ char *Dma_DevNode(struct device *dev, umode_t *mode){
 int Dma_MapReg ( struct DmaDevice *dev ) {
    if ( dev->base == NULL ) {
       dev_info(dev->device,"Init: Mapping Register space 0x%llx with size 0x%x.\n",dev->baseAddr,dev->baseSize);
-      dev->base = ioremap_nocache(dev->baseAddr, dev->baseSize);
+      dev->base = ioremap(dev->baseAddr, dev->baseSize);
       if (! dev->base ) {
          dev_err(dev->device,"Init: Could not remap memory.\n");
          return -1;
