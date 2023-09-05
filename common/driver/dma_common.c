@@ -43,14 +43,6 @@ struct file_operations DmaFunctions = {
 };
 
 // Setup proc file operations
-// static struct file_operations DmaProcOps = {
-//   .owner   = THIS_MODULE,
-//   .open    = Dma_ProcOpen,
-//   .read    = seq_read,
-//   .llseek  = seq_lseek,
-//   .release = seq_release
-//};
-
 static struct proc_ops DmaProcOps = {
    .proc_open    = Dma_ProcOpen,
    .proc_read    = seq_read,
